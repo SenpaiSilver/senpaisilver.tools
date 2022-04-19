@@ -1,0 +1,43 @@
+#discord-preview .voice-container {
+    font-family: Whitney;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #fff;
+}
+
+#discord-preview .voice-container .voice-states {
+    list-style-type: none;
+    padding-left: 15px;
+}
+
+#discord-preview .voice-container .voice-states .voice-state {
+    height: 50px;
+    margin-bottom: 8px;
+}
+
+#discord-preview .voice-container .voice-states .voice-state .avatar {
+    height: 50px;
+    width: 50px;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    float: left;
+    margin-right: 8px;
+}
+
+#discord-preview .voice-container .voice-states .voice-state .avatar.speaking {
+    border-color: #43b581;
+}
+
+#discord-preview .voice-container .voice-states .voice-state .user {
+    padding-top: 18px;
+}
+
+#discord-preview .voice-container .voice-states .voice-state .user .name {
+    background-color: #1e2124;
+    border-radius: 3px;
+    padding: 4px 6px;
+
+    /* This enables the font */
+    font-family: system-ui;
+}

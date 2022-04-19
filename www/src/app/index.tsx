@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Home from "@app/home";
+import VocalOverlay from "@app/discord/vocal_overlay";
 
 function Layout() {
     return (
@@ -27,7 +28,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="discord-vs-overlay" element={<Home />} />
+                    <Route path="discord-vs-overlay" element={<VocalOverlay />} />
                 </Route>
             </Routes>
         </BrowserRouter>

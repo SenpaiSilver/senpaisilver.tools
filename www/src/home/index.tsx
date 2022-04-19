@@ -2,6 +2,6 @@ import React from "react";
 
 export default function Home() {
     return (
-        <p>Heh</p>
+        <p key="123">Heh</p>
     );
 }

@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import App from "./app";
-
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -11,11 +10,16 @@ const queryClient = new QueryClient({
     },
 });
 
-ReactDOM.render(
+const container = document.getElementById('app');
+
+if (!container) {
+    throw new Error('Failed to find root elements');
+}
+
+const root = createRoot(container)
+
+root.render(
     <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <App />
-        </QueryClientProvider>
-    </React.StrictMode>,
-    document.getElementById("root")
+        <App />
+    </React.StrictMode>
 );
