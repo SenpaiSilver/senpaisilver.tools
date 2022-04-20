@@ -18,25 +18,26 @@ interface Size {
 interface UserInfoFormProps {
     user: DiscordUser;
     index: number;
+    handleChange: any;
 }
 
-function UserInfoForm({ user, index }: UserInfoFormProps) {
-    return (<div>
+function UserInfoForm({ user, index, handleChange }: UserInfoFormProps) {
+    return (<form onChange={handleChange}>
         <label htmlFor={`username-${index}`}>Username: </label>
-        <input type="text" id={`username-${index}`} defaultValue={user.username} />
+        <input type="text" name="username" id={`username-${index}`} defaultValue={user.username} />
 
         <label htmlFor={`userid-${index}`}>User ID: </label>
-        <input type="text" id={`userid-${index}`} pattern="\d+" defaultValue={user.id} />
+        <input type="number" name="id" id={`userid-${index}`} pattern="\d+" defaultValue={user.id} />
 
         <label htmlFor={`avatar-url-${index}`}>Avatar URL: </label>
-        <input type="text" id={`avatar-url-${index}`} defaultValue={user.avatar} />
+        <input type="text" name="avatar" id={`avatar-url-${index}`} defaultValue={user.avatar} />
 
         <label htmlFor={`avatar-talking-url-${index}`}>Avatar Talking URL: </label>
-        <input type="text" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
+        <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
 
         {/* <input type="checkbox" id={`is-talking-${index}`} checked={user.speaking}/>
         <label htmlFor={`is-talking-${index}`}>Speaking</label> */}
-    </div>)
+    </form>)
 }
 
 
@@ -73,6 +74,7 @@ function Preview({ users, style }: PreviewProps) {
     </>);
 }
 
+// Based on https://blog.senpaisilver.com/web/discord-animated-voice-pngs/
 export default function VocalOverlay() {
     const [users, setUsers] = useState<DiscordUser[]>([
         {
@@ -89,8 +91,10 @@ export default function VocalOverlay() {
     ]);
     const [nameDisplay, setNameDisplay] = useState<boolean>(true);
     const [silentDim, setSilentDim] = useState<boolean>(false);
+    const [speakBump, setSpeakBump] = useState<boolean>(false);
+    const [freeCSS, setFreeCSS] = useState<string>("");
     const [animation, setAnimation] = useState<string>("");
-    const [alignement, setAlignement] = useState<"horizontal" | "vertical">("horizontal");
+    const [alignement, setAlignement] = useState<"horizontal" | "vertical">("vertical");
     const [margin, setMargin] = useState<number | null>(null);
     const [padding, setPadding] = useState<number | null>(null);
     const [border, setBorder] = useState<number | null>(null);
@@ -99,10 +103,17 @@ export default function VocalOverlay() {
         height: "auto"
     });
 
+    // FIXME: Not adding a new user, new form fields and new preview
     function newUser() {
-        const existing_users = users;
-        existing_users.push({ id: "", username: "" } as DiscordUser);
-        setUsers(existing_users);
+        const newuser: DiscordUser = {
+            id: Math.random().toString().replace('.', ''),
+            username: "New User",
+            speaking: false,
+        };
+        console.log(users.concat(newuser))
+        setUsers(users => {
+            return (users.concat([newuser]))
+        })
     }
 
     function buildRule(selector: string, rules: Record<string, string>) {
@@ -121,6 +132,7 @@ export default function VocalOverlay() {
     }
 
     function compileStyle() {
+        var plain_text = ""
         const voice_state: Record<string, string> = {};
         const avatar: Record<string, string> = {};
         const speakingAvatar: Record<string, string> = {};
@@ -139,15 +151,13 @@ export default function VocalOverlay() {
             name["display"] = "none";
         }
 
-        var plain_text = ""
         plain_text += buildRule(".voice-state", voice_state);
         plain_text += buildRule(".avatar", avatar);
+        plain_text += buildRule(".speaking", speakingAvatar);
         plain_text += buildRule(".name", name);
 
         return (plain_text.trim());
     }
-
-    console.log("CustomCSS", compileStyle());
 
     function compileCustomAvatar(users: DiscordUser[]) {
         var plain_text = "";
@@ -159,7 +169,8 @@ export default function VocalOverlay() {
             if (usr.talk_avatar)
                 plain_text += `.avatar.speaking[data-reactid*="${usr.id}"] {content: url("${usr.talk_avatar}");}\n`;
         }
-        return (plain_text)
+        plain_text += "\n" + freeCSS;
+        return (plain_text.trim())
     }
 
     const compiled_css = compileStyle() + "\n\n" + compileCustomAvatar(users);
@@ -167,12 +178,30 @@ export default function VocalOverlay() {
     return (
         <div className="">
             <h1>Discord Vocal Overlay</h1>
-            <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} />
-            <label htmlFor="display-name">Display username ?</label>
+            <div>
+                <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={nameDisplay} />
+                <label htmlFor="display-name" defaultChecked={nameDisplay}>Hide usernames</label>
+            </div>
+
+            <div>
+                <label htmlFor="free_css">Other CSS:</label>
+                <textarea style={{display: "block"}} onChange={(e) => setFreeCSS(e.target.value)}></textarea>
+            </div>
 
             <h2>Users</h2>
             {users.map((usr, index) => {
-                return (<UserInfoForm user={usr} index={index} />);
+                // FIXME: Not updating the user element
+                return (<UserInfoForm key={index} user={usr} index={index} handleChange={(e: any) => {
+                    console.log(index, e, e.target.name, e.target.value);
+                    const field: string = e.target.name as string;
+                    const value: string = e.target.value as string;
+                    var current_users: DiscordUser[] = users;
+                    var cur_usr = Object(current_users[index])
+                    cur_usr[field] = value
+                    current_users[index] = cur_usr;
+                    console.log(current_users[index]);
+                    setUsers(current_users);
+                }}/>);
             })}
             <button type="button" onClick={newUser}>+</button>
 
