@@ -18,11 +18,13 @@ interface Size {
 interface UserInfoFormProps {
     user: DiscordUser;
     index: number;
-    handleChange: any;
+    handleChange: (ev: any, index: number) => void;
+    removeUser: (index: number) => void;
 }
 
-function UserInfoForm({ user, index, handleChange }: UserInfoFormProps) {
-    return (<form onChange={handleChange}>
+function UserInfoForm({ user, index, handleChange, removeUser }: UserInfoFormProps) {
+    return (<form onChange={(ev) => handleChange(ev, index)}>
+        <button type="button" onClick={() => removeUser(index)}>-</button>
         <label htmlFor={`username-${index}`}>Username: </label>
         <input type="text" name="username" id={`username-${index}`} defaultValue={user.username} />
 
@@ -35,9 +37,32 @@ function UserInfoForm({ user, index, handleChange }: UserInfoFormProps) {
         <label htmlFor={`avatar-talking-url-${index}`}>Avatar Talking URL: </label>
         <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
 
-        {/* <input type="checkbox" id={`is-talking-${index}`} checked={user.speaking}/>
-        <label htmlFor={`is-talking-${index}`}>Speaking</label> */}
+        <input type="checkbox" id={`is-talking-${index}`} name="speaking" defaultChecked={user.speaking || false}/>
+        <label htmlFor={`is-talking-${index}`}>Speaking</label>
     </form>)
+}
+
+interface PreviewSpeakerProps {
+    user: DiscordUser;
+    index?: number;
+}
+
+function PreviewSpeaker({ user }: PreviewSpeakerProps) {
+    const [speaking, setSpeaking] = useState<boolean>(user.speaking);
+    const attr_id = `$${user.id}/=1$${user.id}`
+
+    useEffect(() => {
+        setSpeaking(user.speaking);
+    }, [user.speaking]);
+
+    return (
+        <li className="voice-state" data-reactid={`.0.0.0.${attr_id}`} onClick={() => setSpeaking(!speaking)}>
+            <img className={`avatar ${speaking ? "speaking" : ""}`} src={`${user.avatar || "https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg"}`} data-reactid={`.0.0.0.${attr_id}.$=10`} />
+            <div className="user" data-reactid={`.0.0.0.${attr_id}.$/=11`}>
+                <span className="name" style={{ color: '#ffffff', fontSize: '14px', backgroundColor: 'rgba(30, 33, 36, 0.95)' }} data-reactid={`.0.0.0.${attr_id}.$/=11.0`}>{user.username}</span>
+            </div>
+        </li>
+    )
 }
 
 
@@ -49,24 +74,11 @@ interface PreviewProps {
 function Preview({ users, style }: PreviewProps) {
     return (<>
         <style>{style}</style>
-
         <div id="discord-preview">
             <div style={{ fontFamily: 'Whitney, sans-serif, sans', backgroundColor: 'transparent' }}>
                 <div className="voice-container">
                     <ul className="voice-states">
-                        {users.map((usr: DiscordUser, index) => {
-                            const attr_id = `$${usr.id}/=1$${usr.id}`
-                            const [speaking, setSpeaking] = useState<boolean>(usr.speaking);
-
-                            return (
-                                <li key={index} className="voice-state" data-reactid={`.0.0.0.${attr_id}`} onClick={() => setSpeaking(!speaking)}>
-                                    <img className={`avatar ${speaking ? "speaking" : ""}`} src={`${usr.avatar || "https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg"}`} data-reactid={`.0.0.0.${attr_id}.$=10`} />
-                                    <div className="user" data-reactid={`.0.0.0.${attr_id}.$/=11`}>
-                                        <span className="name" style={{ color: '#ffffff', fontSize: '14px', backgroundColor: 'rgba(30, 33, 36, 0.95)' }} data-reactid={`.0.0.0.${attr_id}.$/=11.0`}>{usr.username}</span>
-                                    </div>
-                                </li>
-                            )
-                        })}
+                        {users.map((user: DiscordUser, index: number) => <PreviewSpeaker key={index} user={user}/>)}
                     </ul>
                 </div>
             </div>
@@ -81,7 +93,7 @@ export default function VocalOverlay() {
             id: "1234",
             username: "SilentUser",
             speaking: false,
-            avatar: 'https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg'
+            avatar: 'https://images-ext-2.discordapp.net/external/GCPKEebWHN0PcTwg_uCnYUOpfmqijumMmHbAyarbXss/https/media.discordapp.net/attachments/272202136035786754/966366314941788270/IMG_20220418_095430.jpg?width=678&height=528'
         },
         {
             id: "5678",
@@ -110,10 +122,28 @@ export default function VocalOverlay() {
             username: "New User",
             speaking: false,
         };
-        console.log(users.concat(newuser))
         setUsers(users => {
             return (users.concat([newuser]))
         })
+    }
+
+    function removeUser(index: number) {
+        setUsers(users.filter((_, i) => i !== index));
+    }
+
+    function editUser(ev: any, index: number) {
+        const field: string = ev.target.name;
+        var value: string | boolean = ev.target.value;
+
+        if (ev.target.type === "checkbox") {
+            value = ev.target.checked;
+        }
+        console.log(index, field, value, { ...users[index], [field]: value });
+        setUsers([
+            ...users.slice(0, index),
+            { ...users[index], [field]: value },
+            ...users.slice(index + 1)
+        ]);
     }
 
     function buildRule(selector: string, rules: Record<string, string>) {
@@ -179,38 +209,30 @@ export default function VocalOverlay() {
         <div className="">
             <h1>Discord Vocal Overlay</h1>
             <div>
-                <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={nameDisplay} />
-                <label htmlFor="display-name" defaultChecked={nameDisplay}>Hide usernames</label>
+                <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={!nameDisplay} />
+                <label htmlFor="display-name" >Hide usernames</label>
             </div>
 
             <div>
                 <label htmlFor="free_css">Other CSS:</label>
-                <textarea style={{display: "block"}} onChange={(e) => setFreeCSS(e.target.value)}></textarea>
+                <textarea style={{ display: "block" }} onChange={(e) => setFreeCSS(e.target.value)}></textarea>
             </div>
 
             <h2>Users</h2>
             {users.map((usr, index) => {
-                // FIXME: Not updating the user element
-                return (<UserInfoForm key={index} user={usr} index={index} handleChange={(e: any) => {
-                    console.log(index, e, e.target.name, e.target.value);
-                    const field: string = e.target.name as string;
-                    const value: string = e.target.value as string;
-                    var current_users: DiscordUser[] = users;
-                    var cur_usr = Object(current_users[index])
-                    cur_usr[field] = value
-                    current_users[index] = cur_usr;
-                    console.log(current_users[index]);
-                    setUsers(current_users);
-                }}/>);
+                return (<UserInfoForm key={index} user={usr} index={index} removeUser={removeUser} handleChange={(ev: any) => {
+                    editUser(ev, index);
+                }} />);
             })}
             <button type="button" onClick={newUser}>+</button>
 
             <h2>Code</h2>
             <pre style={{ padding: "5px", fontFamily: "monospace", border: "3px solid black", display: "block" }}>
-                <code>{compiled_css.trim()}</code>
+                <code>{compiled_css.trim() || "/* Make changes to generate CSS */"}</code>
             </pre>
 
             <h2>Preview</h2>
+            <p>Click the user to make them "speak".</p>
             <div style={{ border: "3px solid black" }}>
                 <Preview users={users} style={compiled_css.trim()} />
             </div>
