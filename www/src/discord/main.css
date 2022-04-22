@@ -1,0 +1,12 @@
+pre {
+    border: 3px solid black;
+    padding: 15px;
+    overflow-y: scroll;
+    max-height: 14em;
+}
+
+code {
+    display: block;
+    word-wrap: break-word;
+    white-space: break-spaces;
+}

@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import Preview from "./preview";
 import UserInfoForm from "./userform";
 
-interface Size {
+import "@app/discord/main.css";
+
+interface ISize {
     width: number | "auto";
     height: number | "auto";
 }
@@ -26,18 +28,20 @@ export default function VocalOverlay() {
     const [nameDisplay, setNameDisplay] = useState<boolean>(true);
     const [silentDim, setSilentDim] = useState<boolean>(false);
     const [speakBump, setSpeakBump] = useState<boolean>(false);
+    const [loopAnimation, setLoopAnimation] = useState<boolean>(false);
+    const [borderRadius, setBorderRadius] = useState<number>(50);
     const [freeCSS, setFreeCSS] = useState<string>("");
     const [animation, setAnimation] = useState<string>("");
-    const [alignement, setAlignement] = useState<"horizontal" | "vertical">("vertical");
+    const [defaultAvatar, setDefaultAvatar] = useState<string>("");
+    const [defaultAvatarSpeaking, setDefaultAvatarSpeaking] = useState<string>("");
+    const [singleLine, setSingleLine] = useState<boolean>(false);
     const [margin, setMargin] = useState<number | null>(null);
     const [padding, setPadding] = useState<number | null>(null);
-    const [border, setBorder] = useState<number | null>(null);
-    const [size, setSize] = useState<Size>({
-        width: "auto",
+    const [size, setSize] = useState<ISize>({
+        width: 84,
         height: "auto"
     });
 
-    // FIXME: Not adding a new user, new form fields and new preview
     function newUser() {
         const newuser: DiscordUser = {
             id: Math.random().toString().replace('.', ''),
@@ -60,7 +64,7 @@ export default function VocalOverlay() {
         if (ev.target.type === "checkbox") {
             value = ev.target.checked;
         }
-        console.log(index, field, value, { ...users[index], [field]: value });
+
         setUsers([
             ...users.slice(0, index),
             { ...users[index], [field]: value },
@@ -90,18 +94,75 @@ export default function VocalOverlay() {
         const speakingAvatar: Record<string, string> = {};
         const name: Record<string, string> = {};
 
-        if (alignement == "horizontal") {
+        // voice_state["display"] = "flex";
+        // voice_state["align-content"] = "center";
+        // voice_state["flex-wrap"] = "wrap";
+
+        if (singleLine) {
+            voice_state["height"] = "unset !important";
             voice_state["display"] = "inline-block !important";
         }
 
         if (silentDim) {
             avatar["filter"] = "brightness(50%)";
             speakingAvatar["filter"] = "brightness(100%)";
+            speakingAvatar["border-color"] = "rgba(0, 0, 0, 0) !important";
         }
 
         if (!nameDisplay) {
             name["display"] = "none";
         }
+
+        if (borderRadius < 50) {
+            avatar["border-radius"] = `${borderRadius}% !important`;
+        }
+
+        // Glitchy
+        // if (size.height === "auto" || size.height > 0) {
+        //     voice_state["min-height"] = (size.height === "auto" ? "auto" : `${size.height}px`)
+        //     avatar["height"] = voice_state["min-height"] + " !important";
+        // }
+
+        // Must be run after height to override if needed
+        if (size.width === "auto" || size.width > 0) {
+            if (!singleLine && size.width > 0) {
+                voice_state["min-height"] = `${size.width}px`;
+            }
+            avatar["width"] = (size.width === "auto" ? "auto" : `${size.width}px`) + " !important";
+            avatar["height"] = "auto !important";
+            // voice_state["min-height"] = "auto !important";
+        }
+
+        if (speakBump) {
+            speakingAvatar["position"] = "relative";
+            speakingAvatar["animation-name"] = "speaking-now";
+            speakingAvatar["animation-duration"] = "1s";
+            speakingAvatar["animation-fill-mode"] = "forwards";
+
+            if (loopAnimation) {
+                speakingAvatar["animation-iteration-count"] = "infinite";
+            }
+
+            plain_text += "@keyframes speaking-now {\n"
+                + "\t0%  { bottom:0px; }\n"
+                + "\t15% { bottom:15px; }\n"
+                + "\t30% { bottom:0px; }\n"
+                + "}\n";
+        }
+
+        if (defaultAvatar) {
+            avatar["content"] = `url(${defaultAvatar})`;
+        }
+
+        if (defaultAvatarSpeaking) {
+            speakingAvatar["content"] = `url(${defaultAvatarSpeaking})`;
+        }
+
+        // const [speakBump, setSpeakBump] = useState<boolean>(false);
+        // const [animation, setAnimation] = useState<string>("");
+        // const [margin, setMargin] = useState<number | null>(null);
+        // const [padding, setPadding] = useState<number | null>(null);
+        // const [size, setSize] = useState<Size>({
 
         plain_text += buildRule(".voice-state", voice_state);
         plain_text += buildRule(".avatar", avatar);
@@ -113,13 +174,15 @@ export default function VocalOverlay() {
 
     function compileCustomAvatar(users: DiscordUser[]) {
         var plain_text = "";
-        for (let usr of users) {
+        for (const usr of users.filter((v) => v.id !== "")) {
             if (usr.avatar || usr.talk_avatar)
                 plain_text += `/* User: ${usr.username} (${usr.id}) */\n`
             if (usr.avatar)
                 plain_text += `.avatar[data-reactid*="${usr.id}"] {content: url("${usr.avatar}");}\n`;
             if (usr.talk_avatar)
                 plain_text += `.avatar.speaking[data-reactid*="${usr.id}"] {content: url("${usr.talk_avatar}");}\n`;
+            plain_text = plain_text.trimEnd();
+            plain_text += "\n\n";
         }
         plain_text += "\n" + freeCSS;
         return (plain_text.trim())
@@ -130,10 +193,43 @@ export default function VocalOverlay() {
     return (
         <div className="">
             <h1>Discord Vocal Overlay</h1>
-            <div>
-                <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={!nameDisplay} />
-                <label htmlFor="display-name" >Hide usernames</label>
-            </div>
+            <ul>
+                <li>
+                    <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={!nameDisplay} />
+                    <label htmlFor="display-name">Hide usernames</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="silent-dim" onChange={() => setSilentDim(!silentDim)} defaultChecked={silentDim} />
+                    <label htmlFor="silent-dim">Dim silent users</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="single-line" onChange={() => setSingleLine(!singleLine)} defaultChecked={singleLine} />
+                    <label htmlFor="single-line">Single line</label>
+                </li>
+                <li>
+                    <label htmlFor="avatar-border-radius">Round avatar:</label>
+                    <input type="number" id="avatar-border-radius" min="0" max="50" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
+                </li>
+                <li>
+                    <input type="checkbox" id="speak-bump" onChange={() => setSpeakBump(!speakBump)} defaultChecked={speakBump} />
+                    <label htmlFor="speak-bump">Speak bump</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="loop-animation" disabled={!speakBump} onChange={() => setLoopAnimation(!loopAnimation)} defaultChecked={loopAnimation} />
+                    <label htmlFor="loop-animation">Loop speaking animation</label>
+                </li>
+                <li>
+                    <label htmlFor="set-width" >Avatar width:</label>
+                    <input type="number" id="set-width" onChange={(ev) => {
+                        const value = Number(ev.target.value);
+                        const sizing: ISize = {
+                            width: isNaN(value) || value <= 0 ? "auto" : value,
+                            height: size.height
+                        }
+                        setSize(sizing);
+                    }} defaultValue={size.width || 0} />
+                </li>
+            </ul>
 
             <div>
                 <label htmlFor="free_css">Other CSS:</label>
@@ -149,12 +245,12 @@ export default function VocalOverlay() {
             <button type="button" onClick={newUser}>+</button>
 
             <h2>Code</h2>
-            <pre style={{ padding: "5px", fontFamily: "monospace", border: "3px solid black", display: "block" }}>
+            <pre>
                 <code>{compiled_css.trim() || "/* Make changes to generate CSS */"}</code>
             </pre>
 
             <h2>Preview</h2>
-            <p>Click the user to make them "speak".</p>
+            <p>Ordered alphabetically just like on Discord, click the user to make them "speak".</p>
             <div style={{ border: "3px solid black" }}>
                 <Preview users={users} style={compiled_css.trim()} />
             </div>

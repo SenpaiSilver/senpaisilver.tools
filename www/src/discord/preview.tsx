@@ -32,13 +32,20 @@ interface PreviewProps {
 }
 
 export default function Preview({ users, style }: PreviewProps) {
+    const [sortedUsers, setSortedUsers] = useState<DiscordUser[]>([]);
+
+    useEffect(() => {
+        setSortedUsers([...users].sort((a, b) => a.username.toLocaleLowerCase() < b.username.toLocaleLowerCase() ? -1 : 1))
+    }, [users]);
+
+
     return (<>
         <style>{style}</style>
         <div id="discord-preview">
             <div style={{ fontFamily: 'Whitney, sans-serif, sans', backgroundColor: 'transparent' }}>
                 <div className="voice-container">
                     <ul className="voice-states">
-                        {users.map((user: DiscordUser, index: number) => <PreviewSpeaker key={index} user={user}/>)}
+                        {sortedUsers.map((user: DiscordUser, index: number) => <PreviewSpeaker key={index} user={user} />)}
                     </ul>
                 </div>
             </div>
