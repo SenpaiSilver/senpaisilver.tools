@@ -1,89 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import "@app/discord/vocal_preview.css";
-
-interface DiscordUser {
-    id: string;
-    username: string;
-    speaking: boolean;
-    avatar?: string;
-    talk_avatar?: string;
-};
+import Preview from "./preview";
+import UserInfoForm from "./userform";
 
 interface Size {
     width: number | "auto";
     height: number | "auto";
-}
-
-interface UserInfoFormProps {
-    user: DiscordUser;
-    index: number;
-    handleChange: (ev: any, index: number) => void;
-    removeUser: (index: number) => void;
-}
-
-function UserInfoForm({ user, index, handleChange, removeUser }: UserInfoFormProps) {
-    return (<form onChange={(ev) => handleChange(ev, index)}>
-        <button type="button" onClick={() => removeUser(index)}>-</button>
-        <label htmlFor={`username-${index}`}>Username: </label>
-        <input type="text" name="username" id={`username-${index}`} defaultValue={user.username} />
-
-        <label htmlFor={`userid-${index}`}>User ID: </label>
-        <input type="number" name="id" id={`userid-${index}`} pattern="\d+" defaultValue={user.id} />
-
-        <label htmlFor={`avatar-url-${index}`}>Avatar URL: </label>
-        <input type="text" name="avatar" id={`avatar-url-${index}`} defaultValue={user.avatar} />
-
-        <label htmlFor={`avatar-talking-url-${index}`}>Avatar Talking URL: </label>
-        <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
-
-        {/* <input type="checkbox" id={`is-talking-${index}`} name="speaking" defaultChecked={user.speaking || false}/>
-        <label htmlFor={`is-talking-${index}`}>Speaking</label> */}
-    </form>)
-}
-
-interface PreviewSpeakerProps {
-    user: DiscordUser;
-    index?: number;
-}
-
-function PreviewSpeaker({ user }: PreviewSpeakerProps) {
-    const [speaking, setSpeaking] = useState<boolean>(user.speaking);
-    const attr_id = `$${user.id}/=1$${user.id}`
-
-    useEffect(() => {
-        setSpeaking(user.speaking);
-    }, [user.speaking]);
-
-    return (
-        <li className="voice-state" data-reactid={`.0.0.0.${attr_id}`} onClick={() => setSpeaking(!speaking)}>
-            <img className={`avatar ${speaking ? "speaking" : ""}`} src={`${user.avatar || "https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg"}`} data-reactid={`.0.0.0.${attr_id}.$=10`} />
-            <div className="user" data-reactid={`.0.0.0.${attr_id}.$/=11`}>
-                <span className="name" style={{ color: '#ffffff', fontSize: '14px', backgroundColor: 'rgba(30, 33, 36, 0.95)' }} data-reactid={`.0.0.0.${attr_id}.$/=11.0`}>{user.username}</span>
-            </div>
-        </li>
-    )
-}
-
-
-interface PreviewProps {
-    users: DiscordUser[];
-    style: string;
-}
-
-function Preview({ users, style }: PreviewProps) {
-    return (<>
-        <style>{style}</style>
-        <div id="discord-preview">
-            <div style={{ fontFamily: 'Whitney, sans-serif, sans', backgroundColor: 'transparent' }}>
-                <div className="voice-container">
-                    <ul className="voice-states">
-                        {users.map((user: DiscordUser, index: number) => <PreviewSpeaker key={index} user={user}/>)}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </>);
 }
 
 // Based on https://blog.senpaisilver.com/web/discord-animated-voice-pngs/
