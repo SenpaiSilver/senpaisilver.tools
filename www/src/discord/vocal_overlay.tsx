@@ -37,8 +37,8 @@ function UserInfoForm({ user, index, handleChange, removeUser }: UserInfoFormPro
         <label htmlFor={`avatar-talking-url-${index}`}>Avatar Talking URL: </label>
         <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
 
-        <input type="checkbox" id={`is-talking-${index}`} name="speaking" defaultChecked={user.speaking || false}/>
-        <label htmlFor={`is-talking-${index}`}>Speaking</label>
+        {/* <input type="checkbox" id={`is-talking-${index}`} name="speaking" defaultChecked={user.speaking || false}/>
+        <label htmlFor={`is-talking-${index}`}>Speaking</label> */}
     </form>)
 }
 
