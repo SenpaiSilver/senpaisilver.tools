@@ -38,3 +38,21 @@ code {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+textarea {
+    &.free-css,
+    &.copy-paste {
+        display: block;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    &.free-css {
+        resize: vertical;
+        min-height: 3em;
+    }
+
+    &.copy-paste {
+        min-height: 15em;
+    }
+}

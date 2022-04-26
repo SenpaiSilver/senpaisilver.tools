@@ -28,6 +28,7 @@ export default {
   },
   devOptions: {
     // hmrErrorOverlay: false,
+    output: "stream",
   },
   buildOptions: {
     /* ... */

@@ -4,6 +4,7 @@ import Preview from "./preview";
 import UserInfoForm from "./userform";
 
 import "@app/discord/discord.css";
+import { CopyButton } from "@app/components/CopyButton";
 
 interface ISize {
     width: number | "auto";
@@ -233,7 +234,7 @@ export default function VocalOverlay() {
 
             <div>
                 <label htmlFor="free_css">Other CSS:</label>
-                <textarea style={{ display: "block" }} onChange={(e) => setFreeCSS(e.target.value)}></textarea>
+                <textarea className="free-css" onChange={(e) => setFreeCSS(e.target.value)}></textarea>
             </div>
 
             <h2>Users</h2>
@@ -251,9 +252,8 @@ export default function VocalOverlay() {
             </div>
 
             <h2>Code</h2>
-            <pre>
-                <code>{compiled_css.trim() || "/* Make changes to generate CSS */"}</code>
-            </pre>
+            <textarea className="copy-paste" value={compiled_css.trim()} readOnly></textarea>
+            <CopyButton value={compiled_css.trim()}/>
         </div>
     );
 }
