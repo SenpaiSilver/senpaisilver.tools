@@ -21,10 +21,10 @@ export default {
     optimize: true,
   },
   packageOptions: {
-    /* ... */
+    knownEntrypoints: [ 'react-dom' ]
   },
   devOptions: {
-    /* ... */
+    // hmrErrorOverlay: false,
   },
   buildOptions: {
     /* ... */

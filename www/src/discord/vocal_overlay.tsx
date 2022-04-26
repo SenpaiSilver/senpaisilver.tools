@@ -25,16 +25,16 @@ export default function VocalOverlay() {
             speaking: true,
         },
     ]);
-    const [nameDisplay, setNameDisplay] = useState<boolean>(true);
-    const [silentDim, setSilentDim] = useState<boolean>(false);
-    const [speakBump, setSpeakBump] = useState<boolean>(false);
+    const [nameDisplay, setNameDisplay] = useState<boolean>(false);
+    const [silentDim, setSilentDim] = useState<boolean>(true);
+    const [speakBump, setSpeakBump] = useState<boolean>(true);
     const [loopAnimation, setLoopAnimation] = useState<boolean>(false);
     const [borderRadius, setBorderRadius] = useState<number>(50);
     const [freeCSS, setFreeCSS] = useState<string>("");
     const [animation, setAnimation] = useState<string>("");
     const [defaultAvatar, setDefaultAvatar] = useState<string>("");
     const [defaultAvatarSpeaking, setDefaultAvatarSpeaking] = useState<string>("");
-    const [singleLine, setSingleLine] = useState<boolean>(false);
+    const [singleLine, setSingleLine] = useState<boolean>(true);
     const [margin, setMargin] = useState<number | null>(null);
     const [padding, setPadding] = useState<number | null>(null);
     const [size, setSize] = useState<ISize>({
