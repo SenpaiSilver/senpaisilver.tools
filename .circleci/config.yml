@@ -9,6 +9,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
+          root: ~/project/www
           pkg-manager: npm
       - run:
           working_directory: ~/project/www 
