@@ -4,25 +4,24 @@ orbs:
 
 jobs:
   build_test_frontend:
+    working_directory: ~/project/www
     docker:
       - image: cimg/node:17.2.0
     steps:
       - checkout
       - node/install-packages:
-          root: ~/project/www
           pkg-manager: npm
       - run:
-          working_directory: ~/project/www 
           command: npm run build
           name: Build app
       - run:
-          working_directory: ~/project/www
           command: npm run test
           name: Run tests
       - persist_to_workspace:
           root: ~/project
           paths:
             - .
+            
 workflows:
   test_my_app:
     jobs:
