@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Preview from "./preview";
 import UserInfoForm from "./userform";
 
-import "@app/discord/main.css";
+import "@app/discord/discord.css";
 
 interface ISize {
     width: number | "auto";
@@ -244,16 +244,16 @@ export default function VocalOverlay() {
             })}
             <button type="button" onClick={newUser}>+</button>
 
+            <h2>Preview</h2>
+            <p>Ordered alphabetically just like on Discord, click the user to make them "speak".</p>
+            <div className="preview-box">
+                <Preview users={users} style={compiled_css.trim()} />
+            </div>
+
             <h2>Code</h2>
             <pre>
                 <code>{compiled_css.trim() || "/* Make changes to generate CSS */"}</code>
             </pre>
-
-            <h2>Preview</h2>
-            <p>Ordered alphabetically just like on Discord, click the user to make them "speak".</p>
-            <div style={{ border: "3px solid black" }}>
-                <Preview users={users} style={compiled_css.trim()} />
-            </div>
         </div>
     );
 }

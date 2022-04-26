@@ -1,0 +1,40 @@
+form {
+    &:nth-child(odd) {
+        background-color: #404040;
+    }
+}
+
+button {
+    min-width: 2em;
+}
+
+button,
+input {
+    &+label {
+        margin-left: 5px;
+    }
+}
+
+pre {
+    border: 3px solid black;
+    padding: 15px;
+    overflow-y: scroll;
+    max-height: 14em;
+    border: 3px solid white;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+code {
+    display: block;
+    word-wrap: break-word;
+    white-space: break-spaces;
+}
+
+.preview-box {
+    border: 3px solid white;
+    border-radius: 15px;
+    background-image: url('/static/discord/bg_preview_overlay.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
