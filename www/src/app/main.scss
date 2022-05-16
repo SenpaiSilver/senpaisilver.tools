@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+}
+
+nav {
+    display: flex;
+
+    a:nth-child(n+2) {
+        margin-left: 1ch;
+    }
+
+    // &:after {
+    //     text-decoration: none;
+    //     content: "$>";
+    // }
+}
+
+a {
+    display: inline-block;
+    color: white;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:visited {
+        color: white;
+    }
+}
+
+h1 {
+    &:before {
+        content: ">";
+        margin-right: 5px;
+    }
+}
+
+h2, h3, h4, h5 {
+    &:before {
+        content: "#";
+        margin-right: 5px;
+    }
+}

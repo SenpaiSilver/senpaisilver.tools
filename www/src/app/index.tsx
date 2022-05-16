@@ -7,6 +7,8 @@ import {
     Outlet
 } from "react-router-dom";
 
+import "./main.scss";
+
 import Home from "@app/home";
 import VocalOverlay from "@app/discord/vocal_overlay";
 

@@ -3,10 +3,13 @@ export default {
   mount: {
     public: { url: "/", static: true },
     src: { url: "/dist" },
+    // test: { url: "/test" },
   },
   plugins: [
     "@snowpack/plugin-react-refresh",
     "@snowpack/plugin-typescript",
+    // '@snowpack/plugin-postcss',
+    '@snowpack/plugin-sass',
     "snowpack-plugin-hash",
   ],
   alias: {
@@ -25,6 +28,7 @@ export default {
   },
   devOptions: {
     // hmrErrorOverlay: false,
+    output: "stream",
   },
   buildOptions: {
     /* ... */

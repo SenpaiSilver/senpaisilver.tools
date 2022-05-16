@@ -14,15 +14,12 @@ export default function UserInfoForm({ user, index, handleChange, removeUser }: 
         <input type="text" name="username" id={`username-${index}`} defaultValue={user.username} />
 
         <label htmlFor={`userid-${index}`}>User ID: </label>
-        <input type="number" name="id" id={`userid-${index}`} pattern="\d+" defaultValue={user.id} />
+        <input type="number" name="id" id={`userid-${index}`} pattern="\d+" placeholder="Discord user ID" defaultValue={user.id} />
 
         <label htmlFor={`avatar-url-${index}`}>Avatar URL: </label>
-        <input type="text" name="avatar" id={`avatar-url-${index}`} defaultValue={user.avatar} />
+        <input type="text" name="avatar" id={`avatar-url-${index}`} defaultValue={user.avatar} disabled={!user.id} />
 
         <label htmlFor={`avatar-talking-url-${index}`}>Avatar Talking URL: </label>
-        <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} />
-
-        {/* <input type="checkbox" id={`is-talking-${index}`} name="speaking" defaultChecked={user.speaking || false}/>
-        <label htmlFor={`is-talking-${index}`}>Speaking</label> */}
+        <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} disabled={!user.id} />
     </form>)
 }
