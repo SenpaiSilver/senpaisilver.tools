@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-interface ILinks {
-    href: string;
-    title?: string;
-}
-
 export default function Home() {
     const streaming_tools_links: ILinks[] = [
         { href: "discord/obs-overlay", title: "Discord OBS Overlay" },
+    ]
+
+    const misc_tools_links: ILinks[] = [
+        { href: "string", title: "String processing" },
     ]
 
     return (
@@ -24,7 +23,16 @@ export default function Home() {
             <ul>
                 {streaming_tools_links.map((e) => {
                     return (
-                        <li><Link to={e.href}>{e.title || e.href}</Link></li>
+                        <li key={e.href}><Link to={e.href}>{e.title || e.href}</Link></li>
+                    )
+                })}
+            </ul>
+
+            <h2>Misc</h2>
+            <ul>
+                {misc_tools_links.map((e) => {
+                    return (
+                        <li key={e.href}><Link to={e.href}>{e.title || e.href}</Link></li>
                     )
                 })}
             </ul>

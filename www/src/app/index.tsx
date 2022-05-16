@@ -11,6 +11,7 @@ import "./main.scss";
 
 import Home from "@app/home";
 import VocalOverlay from "@app/discord/vocal_overlay";
+import StringProcessing from "@app/string-processing";
 
 function Layout() {
     return (
@@ -44,6 +45,7 @@ export default function App() {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="discord/obs-overlay" element={<VocalOverlay />} />
+                    <Route path="string" element={<StringProcessing />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
