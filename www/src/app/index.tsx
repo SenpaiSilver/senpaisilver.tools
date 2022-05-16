@@ -16,12 +16,25 @@ function Layout() {
     return (
         <>
             <nav>
-                <Link to="/">Home</Link>
-                <Link to="discord-vs-overlay">Discord Vocal Overlay</Link>
+                <Link to="/">Tools</Link>
+                <a href="https://blog.senpaisilver.com">Blog</a>
+                <a href="https://twitter.com/SenpaiSilver">Twitter</a>
+                <a href="https://youtube.com/SenpaiSilver">YouTube</a>
+                <a href="https://github.com/SenpaiSilver">GitHub</a>
             </nav>
-            <Outlet />
+            <div className="outlet">
+                <Outlet />
+            </div>
         </>
-    )
+    );
+}
+
+function NotFound() {
+    return (
+        <>
+            Page not found, sorry about that I guess.
+        </>
+    );
 }
 
 export default function App() {
@@ -30,7 +43,8 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="discord-vs-overlay" element={<VocalOverlay />} />
+                    <Route path="discord/obs-overlay" element={<VocalOverlay />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>
