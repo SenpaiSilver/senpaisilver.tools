@@ -12,7 +12,7 @@ nav {
     display: flex;
 
     a:nth-child(n+2) {
-        margin-left: 5px;
+        margin-left: 1ch;
     }
 
     // &:after {
@@ -43,7 +43,7 @@ h1 {
 
 h2, h3, h4, h5 {
     &:before {
-        content: "-";
+        content: "#";
         margin-right: 5px;
     }
 }

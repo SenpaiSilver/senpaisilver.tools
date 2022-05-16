@@ -1,3 +1,8 @@
+interface ILinks {
+    href: string;
+    title?: string;
+}
+
 interface DiscordUser {
     id: string;
     username: string;

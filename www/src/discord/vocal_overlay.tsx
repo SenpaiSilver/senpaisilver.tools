@@ -45,7 +45,7 @@ export default function VocalOverlay() {
 
     function newUser() {
         const newuser: DiscordUser = {
-            id: Math.random().toString().replace('.', ''),
+            id: "",
             username: "New User",
             speaking: false,
         };
@@ -95,10 +95,6 @@ export default function VocalOverlay() {
         const speakingAvatar: Record<string, string> = {};
         const name: Record<string, string> = {};
 
-        // voice_state["display"] = "flex";
-        // voice_state["align-content"] = "center";
-        // voice_state["flex-wrap"] = "wrap";
-
         if (singleLine) {
             voice_state["height"] = "unset !important";
             voice_state["display"] = "inline-block !important";
@@ -118,12 +114,6 @@ export default function VocalOverlay() {
             avatar["border-radius"] = `${borderRadius}% !important`;
         }
 
-        // Glitchy
-        // if (size.height === "auto" || size.height > 0) {
-        //     voice_state["min-height"] = (size.height === "auto" ? "auto" : `${size.height}px`)
-        //     avatar["height"] = voice_state["min-height"] + " !important";
-        // }
-
         // Must be run after height to override if needed
         if (size.width === "auto" || size.width > 0) {
             if (!singleLine && size.width > 0) {
@@ -131,7 +121,6 @@ export default function VocalOverlay() {
             }
             avatar["width"] = (size.width === "auto" ? "auto" : `${size.width}px`) + " !important";
             avatar["height"] = "auto !important";
-            // voice_state["min-height"] = "auto !important";
         }
 
         if (speakBump) {
@@ -158,12 +147,6 @@ export default function VocalOverlay() {
         if (defaultAvatarSpeaking) {
             speakingAvatar["content"] = `url(${defaultAvatarSpeaking})`;
         }
-
-        // const [speakBump, setSpeakBump] = useState<boolean>(false);
-        // const [animation, setAnimation] = useState<string>("");
-        // const [margin, setMargin] = useState<number | null>(null);
-        // const [padding, setPadding] = useState<number | null>(null);
-        // const [size, setSize] = useState<Size>({
 
         plain_text += buildRule(".voice-state", voice_state);
         plain_text += buildRule(".avatar", avatar);
@@ -194,47 +177,49 @@ export default function VocalOverlay() {
     return (
         <div className="">
             <h1>Discord Vocal Overlay</h1>
-            <ul>
-                <li>
-                    <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={!nameDisplay} />
-                    <label htmlFor="display-name">Hide usernames</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="silent-dim" onChange={() => setSilentDim(!silentDim)} defaultChecked={silentDim} />
-                    <label htmlFor="silent-dim">Dim silent users</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="single-line" onChange={() => setSingleLine(!singleLine)} defaultChecked={singleLine} />
-                    <label htmlFor="single-line">Single line</label>
-                </li>
-                <li>
-                    <label htmlFor="avatar-border-radius">Round avatar:</label>
-                    <input type="number" id="avatar-border-radius" min="0" max="50" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
-                </li>
-                <li>
-                    <input type="checkbox" id="speak-bump" onChange={() => setSpeakBump(!speakBump)} defaultChecked={speakBump} />
-                    <label htmlFor="speak-bump">Speak bump</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="loop-animation" disabled={!speakBump} onChange={() => setLoopAnimation(!loopAnimation)} defaultChecked={loopAnimation} />
-                    <label htmlFor="loop-animation">Loop speaking animation</label>
-                </li>
-                <li>
-                    <label htmlFor="set-width" >Avatar width:</label>
-                    <input type="number" id="set-width" onChange={(ev) => {
-                        const value = Number(ev.target.value);
-                        const sizing: ISize = {
-                            width: isNaN(value) || value <= 0 ? "auto" : value,
-                            height: size.height
-                        }
-                        setSize(sizing);
-                    }} defaultValue={size.width || 0} />
-                </li>
-            </ul>
+            <div className="controls">
+                <ul>
+                    <li>
+                        <input type="checkbox" id="display-name" onChange={() => setNameDisplay(!nameDisplay)} defaultChecked={!nameDisplay} />
+                        <label htmlFor="display-name">Hide usernames</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="silent-dim" onChange={() => setSilentDim(!silentDim)} defaultChecked={silentDim} />
+                        <label htmlFor="silent-dim">Dim silent users</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="single-line" onChange={() => setSingleLine(!singleLine)} defaultChecked={singleLine} />
+                        <label htmlFor="single-line">Single line</label>
+                    </li>
+                    <li>
+                        <label htmlFor="avatar-border-radius">Round avatar:</label>
+                        <input type="number" id="avatar-border-radius" min="0" max="50" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
+                    </li>
+                    <li>
+                        <input type="checkbox" id="speak-bump" onChange={() => setSpeakBump(!speakBump)} defaultChecked={speakBump} />
+                        <label htmlFor="speak-bump">Speak bump</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="loop-animation" disabled={!speakBump} onChange={() => setLoopAnimation(!loopAnimation)} defaultChecked={loopAnimation} />
+                        <label htmlFor="loop-animation">Loop speaking animation</label>
+                    </li>
+                    <li>
+                        <label htmlFor="set-width" >Avatar width:</label>
+                        <input type="number" id="set-width" onChange={(ev) => {
+                            const value = Number(ev.target.value);
+                            const sizing: ISize = {
+                                width: isNaN(value) || value <= 0 ? "auto" : value,
+                                height: size.height
+                            }
+                            setSize(sizing);
+                        }} defaultValue={size.width || 0} />
+                    </li>
+                </ul>
 
-            <div>
-                <label htmlFor="free_css">Other CSS:</label>
-                <textarea className="free-css" onChange={(e) => setFreeCSS(e.target.value)}></textarea>
+                <div className="free-css">
+                    <label htmlFor="free_css">Other CSS:</label>
+                    <textarea onChange={(e) => setFreeCSS(e.target.value)}></textarea>
+                </div>
             </div>
 
             <h2>Users</h2>
@@ -253,7 +238,7 @@ export default function VocalOverlay() {
 
             <h2>Code</h2>
             <textarea className="copy-paste" value={compiled_css.trim()} readOnly></textarea>
-            <CopyButton value={compiled_css.trim()}/>
+            <CopyButton value={compiled_css.trim()} />
         </div>
     );
 }

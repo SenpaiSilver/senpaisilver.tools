@@ -37,22 +37,35 @@ code {
     background-image: url('/static/discord/bg_preview_overlay.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    padding: 15px 5px;
 }
 
 textarea {
-    &.free-css,
+    display: block;
+
     &.copy-paste {
-        display: block;
         width: 100%;
         max-width: 500px;
     }
 
-    &.free-css {
-        resize: vertical;
-        min-height: 3em;
-    }
-
     &.copy-paste {
         min-height: 15em;
+    }
+}
+
+div.custom-animation,
+div.free-css {
+    textarea {
+        resize: vertical;
+        min-height: 6em;
+        min-width: 320px;
+    }
+}
+
+div.controls {
+    display: flex;
+
+    & > * {
+        margin: 5px;
     }
 }
