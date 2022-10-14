@@ -10,7 +10,7 @@ export default {
     "@snowpack/plugin-typescript",
     // '@snowpack/plugin-postcss',
     '@snowpack/plugin-sass',
-    "snowpack-plugin-hash",
+    // "snowpack-plugin-hash",
   ],
   alias: {
     "@app": "./src",
