@@ -14,10 +14,14 @@ export default function Home() {
     return (
         <div>
             <h1>SenpaiSilver.tools</h1>
-
             <p>
                 Here you'll find some tools that might or might not do stuff.<br />
                 All the code and binaries provided are provided as-is, with no warranty whatsoever, use at your own risks.
+            </p>
+
+            <h2>GitHub</h2>
+            <p>
+                It's on <a href="https://github.com/SenpaiSilver/senpaisilver.tools" target="_blank">GitHub</a>.
             </p>
 
             <h2>Streaming tools</h2>
