@@ -18,7 +18,7 @@ export default function VocalOverlay() {
             id: "1234",
             username: "SilentUser",
             speaking: false,
-            avatar: 'https://images-ext-2.discordapp.net/external/GCPKEebWHN0PcTwg_uCnYUOpfmqijumMmHbAyarbXss/https/media.discordapp.net/attachments/272202136035786754/966366314941788270/IMG_20220418_095430.jpg?width=678&height=528'
+            avatar: 'https://cdn.discordapp.com/attachments/455866738198970409/1053964076499353600/avatar_user1_silent.png'
         },
         {
             id: "5678",
@@ -46,7 +46,7 @@ export default function VocalOverlay() {
     function newUser() {
         const newuser: DiscordUser = {
             id: "",
-            username: "New User",
+            username: `New User #${users.length}`,
             speaking: false,
         };
         setUsers(users => {
@@ -93,11 +93,13 @@ export default function VocalOverlay() {
         const voice_state: Record<string, string> = {};
         const avatar: Record<string, string> = {};
         const speakingAvatar: Record<string, string> = {};
+        const voiceUser: Record<string, string> = {};
         const name: Record<string, string> = {};
 
         if (singleLine) {
             voice_state["height"] = "unset !important";
             voice_state["display"] = "inline-block !important";
+            voiceUser["text-align"] = "center";
         }
 
         if (silentDim) {
@@ -151,6 +153,7 @@ export default function VocalOverlay() {
         plain_text += buildRule('[class*="Voice_voiceState__"]', voice_state);
         plain_text += buildRule('img[class*="Voice_avatar__"]', avatar);
         plain_text += buildRule('[class*="Voice_avatarSpeaking__"]', speakingAvatar);
+        plain_text += buildRule('[class*="Voice_user__"]', voiceUser);
         plain_text += buildRule('[class*="Voice_name__"]', name);
 
         return (plain_text.trim());

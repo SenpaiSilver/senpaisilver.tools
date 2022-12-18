@@ -10,6 +10,7 @@ interface PreviewSpeakerProps {
 function PreviewSpeaker({ user }: PreviewSpeakerProps) {
     const [speaking, setSpeaking] = useState<boolean>(user.speaking);
     const attr_id = `$${user.id}/=1$${user.id}`;
+    const avatar = user.avatar || "/static/discord/avatar_default_silent.png";
 
     const style_span = {
         color: "rgb(255, 255, 255)",
@@ -24,7 +25,7 @@ function PreviewSpeaker({ user }: PreviewSpeakerProps) {
     // https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg
     return (
         <li className="Voice_voiceState__OCoZh" onClick={() => setSpeaking(!speaking)}>
-            <img className={`Voice_avatar__htiqH ${speaking ? " Voice_avatarSpeaking__Lali" : ""}`} src={`${user.avatar}#userIDtrick/${user.id}/`} alt="" />
+            <img className={`Voice_avatar__htiqH ${speaking ? " Voice_avatarSpeaking__Lali" : ""}`} src={`${avatar}#userIDtrick/${user.id}/`} alt="" />
             <div className="Voice_user__8fGwX">
                 <span className="Voice_name__TALd9" style={style_span}>{user.username}</span>
             </div>
