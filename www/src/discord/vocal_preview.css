@@ -1,6 +1,6 @@
 /* Discord specific things */
 
-#discord-preview .voice-container {
+#discord-preview [class^="Voice_voiceContainer__"] {
     font-family: Whitney;
     font-weight: 600;
     font-size: 16px;
@@ -8,17 +8,17 @@
     color: #fff;
 }
 
-#discord-preview .voice-container .voice-states {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] {
     list-style-type: none;
     padding-left: 15px;
 }
 
-#discord-preview .voice-container .voice-states .voice-state {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] [class^="Voice_voiceState__"] {
     height: 50px;
     margin-bottom: 8px;
 }
 
-#discord-preview .voice-container .voice-states .voice-state .avatar {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] [class^="Voice_voiceState__"] [class^="Voice_avatar__"] {
     height: 50px;
     width: 50px;
     border: 3px solid transparent;
@@ -27,15 +27,15 @@
     margin-right: 8px;
 }
 
-#discord-preview .voice-container .voice-states .voice-state .avatar.speaking {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] [class^="Voice_voiceState__"] [class^="Voice_avatar__"][class^="Voice_avatarSpeaking__"] {
     border-color: #43b581;
 }
 
-#discord-preview .voice-container .voice-states .voice-state .user {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] [class^="Voice_voiceState__"] [class^="Voice_user__"] {
     padding-top: 18px;
 }
 
-#discord-preview .voice-container .voice-states .voice-state .user .name {
+#discord-preview [class^="Voice_voiceContainer__"] [class^="Voice_voiceStates__"] [class^="Voice_voiceState__"] [class^="Voice_user__"] [class^="Voice_name__"] {
     background-color: #1e2124;
     border-radius: 3px;
     padding: 4px 6px;
