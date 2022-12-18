@@ -162,9 +162,9 @@ export default function VocalOverlay() {
             if (usr.avatar || usr.talk_avatar)
                 plain_text += `/* User: ${usr.username} (${usr.id}) */\n`
             if (usr.avatar)
-                plain_text += `img[class*="Voice_avatar__"][src*="/${usr.id}/"] {content: url("${usr.avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"]:([class*="Voice_avatarSpeaking__"])[src*="/${usr.id}/"] {content: url("${usr.avatar}");}\n`;
             if (usr.talk_avatar)
-                plain_text += `img[class*="Voice_avatar__"][class*="Voice_avatarSpeaking__"][src*="/${usr.id}/"] {content: url("${usr.talk_avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"][class*="Voice_avatarSpeaking__"][src*="/${usr.id}/"] {content: url("${usr.talk_avatar}") !important;}\n`;
             plain_text = plain_text.trimEnd();
             plain_text += "\n\n";
         }
