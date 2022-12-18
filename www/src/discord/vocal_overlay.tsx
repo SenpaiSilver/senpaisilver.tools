@@ -102,7 +102,7 @@ export default function VocalOverlay() {
 
         if (silentDim) {
             avatar["filter"] = "brightness(50%)";
-            speakingAvatar["filter"] = "brightness(100%)";
+            speakingAvatar["filter"] = "brightness(100%) !important";
             speakingAvatar["border-color"] = "rgba(0, 0, 0, 0) !important";
         }
 
@@ -148,10 +148,10 @@ export default function VocalOverlay() {
             speakingAvatar["content"] = `url(${defaultAvatarSpeaking})`;
         }
 
-        plain_text += buildRule(".voice-state", voice_state);
-        plain_text += buildRule(".avatar", avatar);
-        plain_text += buildRule(".speaking", speakingAvatar);
-        plain_text += buildRule(".name", name);
+        plain_text += buildRule('[class*="Voice_voiceState__"]', voice_state);
+        plain_text += buildRule('img[class*="Voice_avatar__"]', avatar);
+        plain_text += buildRule('[class*="Voice_avatarSpeaking__"]', speakingAvatar);
+        plain_text += buildRule('[class*="Voice_name__"]', name);
 
         return (plain_text.trim());
     }
@@ -162,9 +162,9 @@ export default function VocalOverlay() {
             if (usr.avatar || usr.talk_avatar)
                 plain_text += `/* User: ${usr.username} (${usr.id}) */\n`
             if (usr.avatar)
-                plain_text += `img[class^="Voice_avatar__"][src*="/${usr.id}/"] {content: url("${usr.avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"][src*="/${usr.id}/"] {content: url("${usr.avatar}");}\n`;
             if (usr.talk_avatar)
-                plain_text += `img[class^="Voice_avatar__"][class^="Voice_avatarSpeaking__"][src*="/${usr.id}/"] {content: url("${usr.talk_avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"][class*="Voice_avatarSpeaking__"][src*="/${usr.id}/"] {content: url("${usr.talk_avatar}");}\n`;
             plain_text = plain_text.trimEnd();
             plain_text += "\n\n";
         }
@@ -193,7 +193,7 @@ export default function VocalOverlay() {
                     </li>
                     <li>
                         <label htmlFor="avatar-border-radius">Round avatar:</label>
-                        <input type="number" id="avatar-border-radius" min="0" max="50" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
+                        <input type="number" id="avatar-border-radius" min="0" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
                     </li>
                     <li>
                         <input type="checkbox" id="speak-bump" onChange={() => setSpeakBump(!speakBump)} defaultChecked={speakBump} />

@@ -23,8 +23,8 @@ function PreviewSpeaker({ user }: PreviewSpeakerProps) {
     // id                                 160110285066207232
     // https://cdn.discordapp.com/avatars/160110285066207232/d4312fc4392c0cd1a4796c57b7a36b3d.jpg
     return (
-        <li className="Voice_voiceState__OCoZh">
-            <img className="Voice_avatar__htiqH" src={user.avatar} alt="" />
+        <li className="Voice_voiceState__OCoZh" onClick={() => setSpeaking(!speaking)}>
+            <img className={`Voice_avatar__htiqH ${speaking ? " Voice_avatarSpeaking__Lali" : ""}`} src={user.avatar} alt="" />
             <div className="Voice_user__8fGwX">
                 <span className="Voice_name__TALd9" style={style_span}>{user.username}</span>
             </div>
