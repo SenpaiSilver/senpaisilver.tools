@@ -92,20 +92,20 @@ export default function VocalOverlay() {
         var plain_text = ""
         const voice_state: Record<string, string> = {};
         const avatar: Record<string, string> = {};
-        const speakingAvatar: Record<string, string> = {};
-        const voiceUser: Record<string, string> = {};
+        const speaking_avatar: Record<string, string> = {};
+        const voice_user: Record<string, string> = {};
         const name: Record<string, string> = {};
 
         if (singleLine) {
             voice_state["height"] = "unset !important";
             voice_state["display"] = "inline-block !important";
-            voiceUser["text-align"] = "center";
+            voice_user["text-align"] = "center";
         }
 
         if (silentDim) {
             avatar["filter"] = "brightness(50%)";
-            speakingAvatar["filter"] = "brightness(100%) !important";
-            speakingAvatar["border-color"] = "rgba(0, 0, 0, 0) !important";
+            speaking_avatar["filter"] = "brightness(100%) !important";
+            speaking_avatar["border-color"] = "rgba(0, 0, 0, 0) !important";
         }
 
         if (!nameDisplay) {
@@ -126,13 +126,13 @@ export default function VocalOverlay() {
         }
 
         if (speakBump) {
-            speakingAvatar["position"] = "relative";
-            speakingAvatar["animation-name"] = "speaking-now";
-            speakingAvatar["animation-duration"] = "1s";
-            speakingAvatar["animation-fill-mode"] = "forwards";
+            speaking_avatar["position"] = "relative";
+            speaking_avatar["animation-name"] = "speaking-now";
+            speaking_avatar["animation-duration"] = "1s";
+            speaking_avatar["animation-fill-mode"] = "forwards";
 
             if (loopAnimation) {
-                speakingAvatar["animation-iteration-count"] = "infinite";
+                speaking_avatar["animation-iteration-count"] = "infinite";
             }
 
             plain_text += "@keyframes speaking-now {\n"
@@ -147,13 +147,13 @@ export default function VocalOverlay() {
         }
 
         if (defaultAvatarSpeaking) {
-            speakingAvatar["content"] = `url(${defaultAvatarSpeaking})`;
+            speaking_avatar["content"] = `url(${defaultAvatarSpeaking})`;
         }
 
         plain_text += buildRule('[class*="Voice_voiceState__"]', voice_state);
         plain_text += buildRule('img[class*="Voice_avatar__"]', avatar);
-        plain_text += buildRule('[class*="Voice_avatarSpeaking__"]', speakingAvatar);
-        plain_text += buildRule('[class*="Voice_user__"]', voiceUser);
+        plain_text += buildRule('[class*="Voice_avatarSpeaking__"]', speaking_avatar);
+        plain_text += buildRule('[class*="Voice_user__"]', voice_user);
         plain_text += buildRule('[class*="Voice_name__"]', name);
 
         return (plain_text.trim());
