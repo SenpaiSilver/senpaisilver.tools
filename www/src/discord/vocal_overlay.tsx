@@ -18,7 +18,7 @@ export default function VocalOverlay() {
             id: "1234",
             username: "SilentUser",
             speaking: false,
-            avatar: 'https://images-ext-2.discordapp.net/external/GCPKEebWHN0PcTwg_uCnYUOpfmqijumMmHbAyarbXss/https/media.discordapp.net/attachments/272202136035786754/966366314941788270/IMG_20220418_095430.jpg?width=678&height=528'
+            avatar: 'https://cdn.discordapp.com/attachments/455866738198970409/1053964076499353600/avatar_user1_silent.png'
         },
         {
             id: "5678",
@@ -46,7 +46,7 @@ export default function VocalOverlay() {
     function newUser() {
         const newuser: DiscordUser = {
             id: "",
-            username: "New User",
+            username: `New User #${users.length}`,
             speaking: false,
         };
         setUsers(users => {
@@ -92,18 +92,20 @@ export default function VocalOverlay() {
         var plain_text = ""
         const voice_state: Record<string, string> = {};
         const avatar: Record<string, string> = {};
-        const speakingAvatar: Record<string, string> = {};
+        const speaking_avatar: Record<string, string> = {};
+        const voice_user: Record<string, string> = {};
         const name: Record<string, string> = {};
 
         if (singleLine) {
             voice_state["height"] = "unset !important";
             voice_state["display"] = "inline-block !important";
+            voice_user["text-align"] = "center";
         }
 
         if (silentDim) {
             avatar["filter"] = "brightness(50%)";
-            speakingAvatar["filter"] = "brightness(100%)";
-            speakingAvatar["border-color"] = "rgba(0, 0, 0, 0) !important";
+            speaking_avatar["filter"] = "brightness(100%) !important";
+            speaking_avatar["border-color"] = "rgba(0, 0, 0, 0) !important";
         }
 
         if (!nameDisplay) {
@@ -124,13 +126,13 @@ export default function VocalOverlay() {
         }
 
         if (speakBump) {
-            speakingAvatar["position"] = "relative";
-            speakingAvatar["animation-name"] = "speaking-now";
-            speakingAvatar["animation-duration"] = "1s";
-            speakingAvatar["animation-fill-mode"] = "forwards";
+            speaking_avatar["position"] = "relative";
+            speaking_avatar["animation-name"] = "speaking-now";
+            speaking_avatar["animation-duration"] = "1s";
+            speaking_avatar["animation-fill-mode"] = "forwards";
 
             if (loopAnimation) {
-                speakingAvatar["animation-iteration-count"] = "infinite";
+                speaking_avatar["animation-iteration-count"] = "infinite";
             }
 
             plain_text += "@keyframes speaking-now {\n"
@@ -145,13 +147,14 @@ export default function VocalOverlay() {
         }
 
         if (defaultAvatarSpeaking) {
-            speakingAvatar["content"] = `url(${defaultAvatarSpeaking})`;
+            speaking_avatar["content"] = `url(${defaultAvatarSpeaking})`;
         }
 
-        plain_text += buildRule(".voice-state", voice_state);
-        plain_text += buildRule(".avatar", avatar);
-        plain_text += buildRule(".speaking", speakingAvatar);
-        plain_text += buildRule(".name", name);
+        plain_text += buildRule('[class*="Voice_voiceState__"]', voice_state);
+        plain_text += buildRule('img[class*="Voice_avatar__"]', avatar);
+        plain_text += buildRule('[class*="Voice_avatarSpeaking__"]', speaking_avatar);
+        plain_text += buildRule('[class*="Voice_user__"]', voice_user);
+        plain_text += buildRule('[class*="Voice_name__"]', name);
 
         return (plain_text.trim());
     }
@@ -162,9 +165,9 @@ export default function VocalOverlay() {
             if (usr.avatar || usr.talk_avatar)
                 plain_text += `/* User: ${usr.username} (${usr.id}) */\n`
             if (usr.avatar)
-                plain_text += `.avatar[data-reactid*="${usr.id}"] {content: url("${usr.avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"]:([class*="Voice_avatarSpeaking__"])[src*="/${usr.id}/"] {content: url("${usr.avatar}");}\n`;
             if (usr.talk_avatar)
-                plain_text += `.avatar.speaking[data-reactid*="${usr.id}"] {content: url("${usr.talk_avatar}");}\n`;
+                plain_text += `img[class*="Voice_avatar__"][class*="Voice_avatarSpeaking__"][src*="/${usr.id}/"] {content: url("${usr.talk_avatar}") !important;}\n`;
             plain_text = plain_text.trimEnd();
             plain_text += "\n\n";
         }
@@ -193,7 +196,7 @@ export default function VocalOverlay() {
                     </li>
                     <li>
                         <label htmlFor="avatar-border-radius">Round avatar:</label>
-                        <input type="number" id="avatar-border-radius" min="0" max="50" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
+                        <input type="number" id="avatar-border-radius" min="0" onChange={(ev) => setBorderRadius(Number(ev.target.value))} defaultValue={borderRadius} />
                     </li>
                     <li>
                         <input type="checkbox" id="speak-bump" onChange={() => setSpeakBump(!speakBump)} defaultChecked={speakBump} />

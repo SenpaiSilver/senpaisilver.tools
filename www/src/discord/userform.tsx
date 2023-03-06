@@ -23,3 +23,5 @@ export default function UserInfoForm({ user, index, handleChange, removeUser }: 
         <input type="text" name="talk_avatar" id={`avatar-talking-url-${index}`} defaultValue={user.talk_avatar} disabled={!user.id} />
     </form>)
 }
+
+// https://cdn.discordapp.com/attachments/974684903528615978/1053814467894464614/Screenshot_2022-12-18_at_00.22.19.png
