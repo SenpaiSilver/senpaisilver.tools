@@ -1,9 +1,9 @@
-interface ILinks {
+export interface ILinks {
     href: string;
     title?: string;
-}
+};
 
-interface DiscordUser {
+export interface DiscordUser {
     id: string;
     username: string;
     speaking: boolean;
