@@ -1,0 +1,29 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.7.0
+
+jobs:
+  build_test_frontend:
+    docker:
+      - image: cimg/node:17.2.0
+    steps:
+      - checkout
+      - run:
+          working_directory: ~/project/www
+          name: Build app
+          command: | 
+            npm install
+            npm run build
+      - run:
+          working_directory: ~/project/www
+          name: Run tests
+          command: npm run test
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+
+workflows:
+  test_my_app:
+    jobs:
+      - build_test_frontend
