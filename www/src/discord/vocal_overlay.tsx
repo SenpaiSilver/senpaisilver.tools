@@ -18,7 +18,6 @@ export default function VocalOverlay() {
             id: "1234",
             username: "SilentUser",
             speaking: false,
-            avatar: 'https://cdn.discordapp.com/attachments/455866738198970409/1053964076499353600/avatar_user1_silent.png'
         },
         {
             id: "5678",
